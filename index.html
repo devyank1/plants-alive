@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Vida de Plantas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #e5f7e5;
+        }
+
+        .container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .plant {
+            width: 350px;
+            margin: 20px auto;
+            transition: transform 0.3s;
+        }
+
+        .status {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background: #4caf50;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simulador de Vida de Plantas</h1>
+        <img id="plant" src="assets/1.jpeg" alt="Planta" class="plant">
+        <div class="status" id="status">Saúde da Planta: 100%</div>
+        <button id="waterButton">Regar</button>
+        <button id="neglectButton">Negligenciar</button>
+    </div>
+
+    <script>
+        const plant = document.getElementById("plant");
+        const statusText = document.getElementById("status");
+        const waterButton = document.getElementById("waterButton");
+        const neglectButton = document.getElementById("neglectButton");
+
+        let health = 100;
+        let interval;
+
+        function updatePlant() {
+            if (health > 100) health = 100;
+            if (health <= 0) {
+                health = 0;
+                statusText.textContent = "A planta morreu 😢";
+                plant.src = "assets/3.jpeg";
+                clearInterval(interval);
+                waterButton.disabled = true;
+                neglectButton.disabled = true;
+            } else {
+                statusText.textContent = `Saúde da Planta: ${health}%`;
+                if (health < 50) {
+                    plant.src = "assets/2.jpeg";
+                } else {
+                    plant.src = "assets/1.jpeg";
+                }
+            }
+        }
+
+        waterButton.addEventListener("click", () => {
+            health += 10;
+            updatePlant();
+        });
+
+        neglectButton.addEventListener("click", () => {
+            health -= 10;
+            updatePlant();
+        });
+
+        interval = setInterval(() => {
+            health -= 5;
+            updatePlant();
+        }, 3000); // A cada 3 segundos a saúde da planta diminui
+    </script>
+</body>
+</html>
